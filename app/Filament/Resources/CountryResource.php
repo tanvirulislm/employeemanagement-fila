@@ -2,16 +2,22 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CountryResource\Pages;
-use App\Filament\Resources\CountryResource\RelationManagers;
-use App\Models\Country;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Country;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Infolists\Infolist;
+use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\TextEntry;
+use App\Filament\Resources\CountryResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\CountryResource\RelationManagers;
+use App\Filament\Resources\CountryResource\RelationManagers\StateRelationManager;
+use App\Filament\Resources\CountryResource\RelationManagers\EmployeesRelationManager;
+
 
 class CountryResource extends Resource
 {
@@ -54,8 +60,7 @@ class CountryResource extends Resource
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('phone_code')
-                    ->searchable()
-                    ->sortable(),
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -69,6 +74,7 @@ class CountryResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
@@ -79,10 +85,27 @@ class CountryResource extends Resource
             ]);
     }
 
+    public static function infolist(Infolist $infolist): Infolist
+    {
+    return $infolist
+        ->schema([
+            Section::make('Country Details')
+            ->schema([
+                TextEntry::make('name')
+                ->label('Country Name'),
+                TextEntry::make('country_code')
+                ->label('Country Code'),
+                TextEntry::make('phone_code')
+                ->label('Phone Code'),
+            ])->columns(3),
+        ]);
+    }
+
     public static function getRelations(): array
     {
         return [
-            //
+            StateRelationManager::class,
+            EmployeesRelationManager::class,
         ];
     }
 

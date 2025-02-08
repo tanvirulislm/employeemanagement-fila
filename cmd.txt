@@ -1,6 +1,0 @@
-php artisan make:model Country
-php artisan make:model State
-php artisan make:model City
-php artisan make:model Department
-php artisan make:model Employee
-php artisan make:model User

@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\CountryResource\Pages;
 
-use App\Filament\Resources\CountryResource;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
+use App\Filament\Resources\CountryResource;
 
 class EditCountry extends EditRecord
 {
@@ -15,5 +16,12 @@ class EditCountry extends EditRecord
         return [
             Actions\DeleteAction::make(),
         ];
+    }
+
+    protected function getSavedNotification(): ?Notification{
+        return Notification::make()
+            ->success()
+            ->title('Country Updated.')
+            ->body('The country has been updated successfully.');
     }
 }
